@@ -11,9 +11,15 @@ window.onload = function(){
       const offsetLeft =  this.offsetLeft
       const offestTop =  this.offsetTop
       document.onmousemove = function(e){
+        /**
+         * 获取移动距离
+         */
         let distanceX  =  offsetLeft + ( e.clientX -  startX) 
         let distanceY = offestTop + ( e.clientY -  startY)  
         
+        /**
+         * 判断边界
+         */
         if(distanceX<0){
           distanceX =0
         }
@@ -21,7 +27,6 @@ window.onload = function(){
           distanceX = maxWidth - dragWidth
         }
        
-
         if(distanceY<0){
           distanceY =0
         }
@@ -29,7 +34,9 @@ window.onload = function(){
         if( distanceY + dragHeight > maxHeight) {
            distanceY = maxHeight - dragHeight
         }
-       
+        /**
+         * 设置位置
+         */
         dragObj.style.left = distanceX+ 'px'
         dragObj.style.top = distanceY +'px'
       }  
@@ -38,4 +45,14 @@ window.onload = function(){
   document.onmouseup = function(){
     document.onmousemove = null;
   } 
+
+  class  Dragble {
+    constructor (){
+      
+    }
+    
+
+
+    
+  }
 }
