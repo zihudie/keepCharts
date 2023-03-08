@@ -21,14 +21,14 @@
         
       }
       .drag{
-        width: 100px;
+        width: 600px;
         height: 100px;
         background:red;
         position:absolute;
         left: 0;
         top: 0;
       }
-      .drag1{
+      #drag1{
         width: 100px;
         height: 100px;
         background:yellow;
@@ -41,13 +41,13 @@
   <body>
     <div id="container">
      <div class="drag"></div>
-     <div class="drag1"></div>
+     <div id="drag1"></div>
     </div>
     <script src="./index.js"></script>
     <script>
       window.onload = ()=>{
         const  darg = new Dragble('.drag','#container')
-        const  darg1 = new Dragble('.drag1','#container')
+        const  darg1 = new Dragble('#drag1','#container')
       }
     </script>
   </body>

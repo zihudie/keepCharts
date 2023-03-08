@@ -1,13 +1,23 @@
-
-
-(()=>{
+const getId = (()=>{
   let index  = 0
-  function getId(){
-    return ()=>{
-      return  index++
-    }
+  return ()=>{
+    return  index++
   }
-  class  Dragble {
+ })()
+
+ let objEventType = {
+  start: "onmousedown",
+  move: "onmousemove",
+  end: "onmouseup"
+ }
+ if( "ontouchstart" in  document){
+    objEventType = {
+        start: 'ontouchstart',
+        move: 'ontouchmove',
+        end: 'ontouchend'
+    };
+ }
+class  Dragble {
       constructor (objSelector,containierSelector){
         let containerObj =  document.querySelector(containierSelector)
         this.dragObj =  document.querySelector(objSelector)
@@ -17,22 +27,26 @@
         
         this.dragHeight = this.dragObj.clientHeight
         this.dragWidth = this.dragObj.clientWidth
-        
         this.init()
       }
-     getIndex(){
-      return getId()()
-     }
+  
      init(){
       const _this  = this
-      this.dragObj.onmousedown = function(ev){
+      this.dragObj[objEventType.start] = function(ev){
+        // 移动端
+        if (ev.touches && ev.touches.length) {
+            ev = ev.touches[0];
+        }
         const startX= ev.clientX
         const startY= ev.clientY
-        const offsetLeft = this.offsetLeft
-        const offestTop = this.offsetTop
-        _this.dragObj.style.zIndex = _this.getIndex()
-  
-        document.onmousemove = function(e){
+        const offsetLeft = this.offsetLeft //  元素距离左边的位置
+        const offestTop = this.offsetTop // 元素距离顶部的位置
+        _this.dragObj.style.zIndex = getId()
+
+        document[objEventType.move] = function(e){  
+          if (e.touches && e.touches.length) {
+              e = e.touches[0];
+          }
           /**
            * 获取移动距离
            */
@@ -48,26 +62,24 @@
           if(distanceX + _this.dragWidth > _this.maxWidth) {
             distanceX = _this.maxWidth - _this.dragWidth
           }
-         
+        
           if(distanceY < 0){
             distanceY = 0
           }
-  
+
           if( distanceY + _this.dragHeight > _this.maxHeight) {
-             distanceY = _this.maxHeight - _this.dragHeight
+            distanceY = _this.maxHeight - _this.dragHeight
           }
           /**
            * 设置位置
            */
           _this.dragObj.style.left = distanceX+ 'px'
           _this.dragObj.style.top = distanceY +'px'
-        }  
-  
+
+          }     
       }
-      document.onmouseup = function(){
-        document.onmousemove = null;
-      } 
-     }
-  
-  }
-})()
+      document[objEventType.end]= ()=>{
+        document[objEventType.move] = null;
+      }   
+    }
+}
